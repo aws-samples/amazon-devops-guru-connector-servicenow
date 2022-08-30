@@ -139,7 +139,7 @@ REST APIs use three credential types:
 * API Key: A unique code provided by the REST API to identify the calling application or user.
 * OAuth 2.0: An authentication provider provides a secret and uses that information to grant access to a resource. OAuth is beyond the scope of this training module.
 
-** Basic Authentication Credentials
+Basic Authentication Credentials
 In the list of credential types, click the Basic Auth Credentials link. Configure the User name, and Password for the Credential.
  
 * [SERVICE_NOW_HOST]: Your ServiceNow host name. Example: dev92031.service-now.com
@@ -166,12 +166,12 @@ We use java HttpClient to send requests and retrieve their responses.
 
 ServiceNow Table API provides endpoints that allow you to perform create, read, update, and delete (CRUD) operations on existing tables.
 The calling user must have sufficient roles to access the data in the table specified in the request.
-[DELETE] /now/table/{tableName}/{sys_id} - Deletes the specified record from the specified table.
-[GET] /now/table/{tableName} - Retrieves multiple records for the specified table
-[GET] /now/table/{tableName}/{sys_id}) - Retrieves the record identified by the specified sys_id from the specified table.
-[PATCH] /now/table/{tableName}/{sys_id} - Updates the specified record with the name-value pairs included in the request body
-[POST] /now/table/{tableName} - Inserts one record in the specified table. Multiple record insertion is not supported by this method.
-[PUT] /now/table/{tableName}/{sys_id} - Updates the specified record with the request body.
+* [DELETE] /now/table/{tableName}/{sys_id} - Deletes the specified record from the specified table.
+* [GET] /now/table/{tableName} - Retrieves multiple records for the specified table
+* [GET] /now/table/{tableName}/{sys_id}) - Retrieves the record identified by the specified sys_id from the specified table.
+* [PATCH] /now/table/{tableName}/{sys_id} - Updates the specified record with the name-value pairs included in the request body
+* [POST] /now/table/{tableName} - Inserts one record in the specified table. Multiple record insertion is not supported by this method.
+* [PUT] /now/table/{tableName}/{sys_id} - Updates the specified record with the request body.
 
 
 ## Additional
