@@ -130,7 +130,7 @@ Next, you can use AWS Serverless Application Repository to deploy ready to use A
 ## ServiceNow
 
 1. The registration process for the ServiceNow developer portal is fairly simple. You can click on the REGISTER link in the upper-right, if you are not already registered, and fill in your name, e-mail, and choose a password to complete your registration.
-[Demo Your Way in ServiceNow ](https://https://www.servicenow.com/lpdem/demonow-all.html/)
+[Create your account in ServiceNow](https://developer.servicenow.com/)
 
 2. Getting started with credentials
 To create a Credential from the main ServiceNow window, use the All menu to open Connections & Credentials > Credentials. Click the New button.
