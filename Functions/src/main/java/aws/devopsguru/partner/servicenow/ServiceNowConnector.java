@@ -20,10 +20,13 @@ import java.util.Base64;
 import java.util.Date;
 
 public class ServiceNowConnector {
+    // Configure your Environment variables in AWS Lambda.
     public static String username = System.getenv("USER_NAME");
     public static String password = System.getenv("PASSWORD");
     public static String serviceNowHost = System.getenv("SERVICE_NOW_HOST");
 
+    // The Table API provides endpoints that allow you to perform create, read, update, and delete (CRUD) operations on existing tables.
+    // This is a base URL format in ServiceNow
     private static final String baseUriPath = "/api/now/table/incident";
 
     //Create an incident record using a POST request.
@@ -113,7 +116,7 @@ public class ServiceNowConnector {
         return updateIncident(context, incident);
     }
 
-    // To find ServiceNow Incident by DevOps Guru Insight ID using GET request. This function is used everywhere
+    // To find ServiceNow Incident by DevOps Guru Insight ID using GET request.
     private Incident findIncidentByInsightId(String insightId, Context context) {
         LambdaLogger logger = context.getLogger();
         logger.log("Finding existing Incident. " + Util.NEW_LINE);
@@ -129,8 +132,8 @@ public class ServiceNowConnector {
                     result = responseIncidents[0];
                     logger.log("Found incident. ID: " + result.getId() + Util.NEW_LINE);
                 } else {
-                    logger.log("ERROR Could not found incident by InsightId: " + insightId + Util.NEW_LINE);
-                    throw new RuntimeException("Could not found incident by InsightId: " + insightId);
+                    logger.log("ERROR Could not find incident by InsightId: " + insightId + Util.NEW_LINE + response.body());
+                    throw new RuntimeException("Could not find incident by InsightId: " + insightId);
                 }
             } else {
                 logger.log("ERROR ServiceNow response code: " + response.statusCode() + Util.NEW_LINE);

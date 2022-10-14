@@ -1,13 +1,12 @@
 package aws.devopsguru.partner.servicenow.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ServiceNowResult {
+
     Incident result;
 
-    public Incident getResult() {
-        return result;
-    }
-
-    public void setResult(Incident result) {
-        this.result = result;
-    }
 }

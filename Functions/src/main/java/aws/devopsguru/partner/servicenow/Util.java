@@ -2,10 +2,14 @@ package aws.devopsguru.partner.servicenow;
 
 import aws.devopsguru.partner.servicenow.model.Incident;
 import com.amazonaws.services.devopsguru.model.InsightSeverity;
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
-import java.util.Iterator;
+import java.util.Map;
 
 public class Util {
 
@@ -26,6 +30,7 @@ public class Util {
                     + " (Timestamp: " + new Date().getTime() + ")");
             severity = detail.path("insightSeverity").asText();
 
+            // Set all the details of the incident
             StringBuilder description = new StringBuilder(String.format("Insight Id: %s" + NEW_LINE
                             + "Source: %s" + NEW_LINE
                             + "Message type: %s" + NEW_LINE
@@ -81,5 +86,44 @@ public class Util {
         } else {
             return 1;
         }
+    }
+    // Helper Function to get RequestDetails and parsing request
+    public static JsonNode getRequestDetail(Map<String, Object> input, final Context context) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNodeDetail = null;
+        LambdaLogger logger = context.getLogger();
+        try {
+            logger.log("Parsing request.");
+
+            String inputString = objectMapper.writeValueAsString(input);
+            JsonNode jsonNode = objectMapper.readTree(inputString);
+            jsonNodeDetail = jsonNode.path("detail");
+
+        } catch (JsonProcessingException e) {
+            logger.log("ERROR JsonProcessingException : " + e.getMessage());
+            logger.log("Input : " + input);
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+        return jsonNodeDetail;
+    }
+
+    // Helper Function to get JsonNode from Input type
+    public static JsonNode getJsonNodeFromInput(Map<String, Object> input, final Context context) {
+        JsonNode jsonNode = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String inputString = objectMapper.writeValueAsString(input);
+            jsonNode = objectMapper.readTree(inputString);
+
+        } catch (JsonProcessingException e) {
+            context.getLogger().log("ERROR JsonProcessingException : " + e.getMessage());
+            context.getLogger().log("Input : " + input);
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return jsonNode;
     }
 }
