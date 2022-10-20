@@ -133,8 +133,8 @@ Next, you can use AWS Serverless Application Repository to deploy ready to use A
 [Create your account in ServiceNow](https://developer.servicenow.com/)
 
 2. Getting started with credentials
-To create a Credential from the main ServiceNow window, use the All menu to open Connections & Credentials > Credentials. Click the New button.
-REST APIs use three credential types:
+Go to (https://developer.servicenow.com/) and click your profile. After activating your instance you can see instance actions on your profile page, click "Manage instance password". There are the instance name, instance URL, username, and password. You need only intstance URL, username and password. 
+
 * Basic Authentication (recommended): A user name and password combination used to authenticate to the REST API. 
 * API Key: A unique code provided by the REST API to identify the calling application or user.
 * OAuth 2.0: An authentication provider provides a secret and uses that information to grant access to a resource. OAuth is beyond the scope of this training module.
@@ -142,7 +142,7 @@ REST APIs use three credential types:
 Basic Authentication Credentials
 In the list of credential types, click the Basic Auth Credentials link. Configure the User name, and Password for the Credential.
  
-* [SERVICE_NOW_HOST]: Your ServiceNow host name. Example: dev92031.service-now.com
+* [SERVICE_NOW_HOST]: Your ServiceNow host name/instance URL. Example: dev92031.service-now.com
 * [USER_NAME]: The user name for the account to access the REST API.
 * [PASSWORD]: The password for the account to access the REST API.
 
