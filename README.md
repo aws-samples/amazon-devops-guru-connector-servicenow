@@ -133,7 +133,7 @@ Next, you can use AWS Serverless Application Repository to deploy ready to use A
 [Create your account in ServiceNow](https://developer.servicenow.com/)
 
 2. Getting started with credentials
-Go to (https://developer.servicenow.com/) and click your profile. After activating your instance you can see instance actions on your profile page, click "Manage instance password". There are the instance name, instance URL, username, and password. You need only intstance URL, username and password. 
+Go to (https://developer.servicenow.com/) and click on your profile. After activating your instance you can see instance actions on your profile page, click "Manage instance password". There are the instance name, instance URL, username, and password. You need only intstance URL, username, and password. 
 
 * Basic Authentication (recommended): A user name and password combination used to authenticate to the REST API. 
 * API Key: A unique code provided by the REST API to identify the calling application or user.
@@ -173,6 +173,13 @@ The calling user must have sufficient roles to access the data in the table spec
 * [POST] /now/table/{tableName} - Inserts one record in the specified table. Multiple record insertion is not supported by this method.
 * [PUT] /now/table/{tableName}/{sys_id} - Updates the specified record with the request body.
 
+4. Save your code and do the instructions below in the AFTER YOU CUSTOMIZE YOUR CODE section.
+
+INSTRUCTIONS FOR CUSTOMIZING CODE:
+
+1. Go to the Functions/src/main/java/aws/devopsguru/partner/servicenow folder, and you'll see a "ServiceNowConnector" and "AlertType" classes.
+2. CUSTOMIZING ALERT DETAILS
+   -If you would like to customize the details of a specific alert, go to the "AlertType" file and look at the function corresponding to the event trigger you would like to change. There is 1 function for each trigger should be clear to pick out.
 
 ## Additional
 
