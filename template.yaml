@@ -19,13 +19,13 @@ Parameters:
     Type: String
 Metadata:
   AWS::ServerlessRepo::Application:
-    Name: DevOpsGuru-ServiceNow-Connector
+    Name: DevOps-Guru-ServiceNow-Connector
     Description: Creates an Lambda function template for integrating ServiceNow with DevOpsGuru
-    Author: AWSDevOpsGuru
+    Author: Amazon DevOps Guru
     SpdxLicenseId: Apache-2.0
     LicenseUrl: ./LICENSE.txt
     ReadmeUrl: ./README.md
-    Labels: [ 'ServiceNow', 'AWS', 'DevOpsGuru' ]
+    Labels: [ 'ServiceNow' , 'DevOps-Guru']
     HomePageUrl: https://aws.amazon.com/devops-guru/
     SemanticVersion: 0.0.2
     SourceCodeUrl: https://github.com/aws-samples/amazon-devops-guru-connector-servicenow
