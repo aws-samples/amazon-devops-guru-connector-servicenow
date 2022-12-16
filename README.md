@@ -61,12 +61,12 @@ sam build
 
 The SAM CLI installs dependencies defined in `ServiceNowFunctions/pom.xml`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
 
-Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `events` folder in this project.
+Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `Functions/src/test/Events` folder in this project.
 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-sam local invoke ServiceNowFunctions --event events/event.json
+sam local invoke ServiceNowFunctions --event Functions/src/test/Events/CreateIncident.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
