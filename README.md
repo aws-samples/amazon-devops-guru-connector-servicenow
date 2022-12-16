@@ -56,7 +56,7 @@ You can find your API Gateway Endpoint URL in the output values displayed after 
 Build your application with the `sam build` command.
 
 ```bash
-ServiceNowFunctions$ sam build
+sam build
 ```
 
 The SAM CLI installs dependencies defined in `ServiceNowFunctions/pom.xml`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
@@ -66,14 +66,14 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-ServiceNowFunctions$ sam local invoke ServiceNowFunctions --event events/event.json
+sam local invoke ServiceNowFunctions --event events/event.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
 ```bash
-ServiceNowFunctions$ sam local start-api
-ServiceNowFunctions$ curl http://localhost:3000/
+sam local start-api
+curl http://localhost:3000/
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
@@ -98,7 +98,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-ServiceNowFunctions$ sam logs -n ServiceNowFunctions --stack-name ServiceNowFunctions --tail
+sam logs -n ServiceNowFunctions --stack-name ServiceNowFunctions --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -108,8 +108,8 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `ServiceNowFunction/src/test` folder in this project.
 
 ```bash
-ServiceNowFunctions$ cd ServiceNowFunctions
-ServiceNowFunction$ mvn test
+cd ServiceNowFunctions
+mvn test
 ```
 
 ## Cleanup
