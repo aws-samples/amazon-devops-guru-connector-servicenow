@@ -58,7 +58,7 @@ Build your application with the `sam build` command.
 sam build
 ```
 
-The SAM CLI installs dependencies defined in `ServiceNowFunctions/pom.xml`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
+The SAM CLI installs dependencies defined in `Functions/pom.xml`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
 
 Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `Functions/src/test/Events` folder in this project.
 
