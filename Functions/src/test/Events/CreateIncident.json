@@ -1,0 +1,110 @@
+{
+"version": "0",
+"id": "1267aa4c-d573-511c-1d5c-a4464833be6d",
+"detail-type": "DevOps Guru New Insight Open",
+"source": "aws.devops-guru",
+"account": "12345678902",
+"time": "2022-11-15T04:37:33Z",
+"region": "us-east-1",
+"resources": [],
+"detail": {
+"insightSeverity": "low",
+"insightDescription": "DynamoDB SuccessfulRequestLatency Anomalous In Application myServerless-Stack",
+"insightType": "REACTIVE",
+"anomalies": [
+{
+"startTime": "1668486240000",
+"id": "AF92lgx1T-9Cv7dAs2tNW3QAAAGEeYeXAKEHnZEdkj2tdZ1SomMPe03kI0oPi3FY",
+"sourceDetails": [
+{
+"dataSource": "CW_METRICS",
+"dataIdentifiers": {
+"period": "60",
+"stat": "SampleCount",
+"unit": "None",
+"name": "Count",
+"namespace": "AWS/ApiGateway",
+"dimensions": [
+{
+"name": "ApiName",
+"value": "ListRestApiMonitorOper"
+}
+]
+}
+}
+]
+},
+{
+"startTime": "1668486240000",
+"id": "AKDW2WtD0zvBcBT7fUz7mDsAAAGEeYeXACJoSD-P8EmduAJjQ0Xkmc1LJdudA7cS",
+"sourceDetails": [
+{
+"dataSource": "CW_METRICS",
+"dataIdentifiers": {
+"period": "60",
+"stat": "SampleCount",
+"unit": "None",
+"name": "Count",
+"namespace": "AWS/ApiGateway",
+"dimensions": [
+{
+"name": "ApiName",
+"value": "ListRestApiMonitorOper"
+},
+{
+"name": "Stage",
+"value": "prod"
+}
+]
+}
+}
+]
+},
+{
+"startTime": "1668486540000",
+"id": "AFZibyEkm9gp1eQvGy6UIZoAAAGEeYwq4EFyYZoz3kT-Ab03i2RRkiqzgFfG72Kb",
+"sourceDetails": [
+{
+"dataSource": "CW_METRICS",
+"dataIdentifiers": {
+"period": "60",
+"stat": "Maximum",
+"unit": "None",
+"ResourceId": "myServerless-Stack-ShopsTableMonitorOper-5U9YUOFGHWXI",
+"name": "SuccessfulRequestLatency",
+"namespace": "AWS/DynamoDB",
+"ResourceType": "DynamoDB/Table",
+"dimensions": [
+{
+"name": "TableName",
+"value": "myServerless-Stack-ShopsTableMonitorOper-5U9YUOFGHWXI"
+},
+{
+"name": "Operation",
+"value": "Scan"
+}
+]
+}
+}
+],
+"associatedResourceArns": [
+"arn:aws:dynamodb:us-east-1:294317511129:table/myServerless-Stack-ShopsTableMonitorOper-5U9YUOFGHWXI"
+]
+}
+],
+"accountId": "123234123122",
+"messageType": "NEW_INSIGHT",
+"insightUrl": "https://us-east-1.console.aws.amazon.com/devops-guru/insight/reactive/ACKUf1ZTa-9kQ5KBhiMv0VsAAAAAAAAAAFN7nJW26cxflRfs-vgSFozS88D-52UF",
+"startTime": "1668486780000",
+"insightId": "ABC124124",
+"region": "us-east-1",
+"resourceCollection": {
+"cloudFormation": {
+"stackNames": [
+"myServerless-Stack"
+]
+}
+}
+}
+}
+
