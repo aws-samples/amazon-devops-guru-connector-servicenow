@@ -74,6 +74,8 @@ public class ServiceNowConnector {
         Incident incident = findIncidentByInsightId(insightId, context);
         incident.setClosedAt(new Date());
         incident.setClosedNotes("Closed by AWS DevOpsGuru.");
+        incident.setCloseCode("Resolved by Caller");
+        incident.setState("6");
 
         updateIncident(context, incident);
     }

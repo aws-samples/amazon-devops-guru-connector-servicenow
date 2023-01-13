@@ -47,4 +47,10 @@ public class Incident {
 
     @JsonProperty("close_notes")
     private String closedNotes;
+
+    @JsonProperty("state")
+    private String state;
+
+    @JsonProperty("close_code")
+    private String closeCode;
 }
