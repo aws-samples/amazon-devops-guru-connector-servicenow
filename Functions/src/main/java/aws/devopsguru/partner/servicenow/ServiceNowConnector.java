@@ -6,10 +6,17 @@ import aws.devopsguru.partner.servicenow.model.ServiceNowResults;
 import com.amazonaws.services.devopsguru.model.InsightSeverity;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.secretsmanager.AWSSecretsManager;
+import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
+import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
+import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
 import com.amazonaws.util.StringUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -25,8 +32,7 @@ public class ServiceNowConnector {
     public static final String NEW_LINE = System.lineSeparator();
 
     // Configure your Environment variables in AWS Lambda.
-    public static String username = System.getenv("USER_NAME");
-    public static String password = System.getenv("PASSWORD");
+    public static String secretName = System.getenv("SECRET_NAME");
     public static String serviceNowHost = System.getenv("SERVICE_NOW_HOST");
 
     // The Table API provides endpoints that allow you to perform create, read, update, and delete (CRUD) operations on existing tables.
@@ -187,6 +193,17 @@ public class ServiceNowConnector {
 
     // An HttpRequest instance is built through an HttpRequest builder
     private HttpRequest.Builder getBuilderWithBasicValues(String uriPath) {
+
+        JSONObject serviceNowCredentials = getSecret(secretName);
+
+        String username = new String();
+        String password = new String();
+        try {
+            username = serviceNowCredentials.getString("username");
+            password = serviceNowCredentials.getString("password");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);}
+
         if (serviceNowHost == null || username == null || password == null) {
             throw new RuntimeException("ERROR! Could not find environment variables for ServiceNow!");
         }
@@ -196,6 +213,7 @@ public class ServiceNowConnector {
 
         return HttpRequest.newBuilder().uri(URI.create(urlForCreateIncident)).header("Accept", "application/json").header("Authorization", headerAuth);
     }
+
 
     // JSON object format
     private String incidentToJson(Incident incident) throws JsonProcessingException {
@@ -325,5 +343,31 @@ public class ServiceNowConnector {
             throw new RuntimeException(e);
         }
         return jsonNode;
+    }
+
+    public JSONObject getSecret(String secretName) {
+
+        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
+                .build();
+
+        String secret = "";
+        GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
+                .withSecretId(secretName);
+        GetSecretValueResult getSecretValueResult = null;
+
+        try {
+            getSecretValueResult = client.getSecretValue(getSecretValueRequest);
+        } catch (Exception e) {
+            throw e;
+        }
+        if (getSecretValueResult.getSecretString() != null) {
+            secret = getSecretValueResult.getSecretString();
+        }
+        try {
+            JSONObject jsonObject = new JSONObject(secret);
+            return jsonObject;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
