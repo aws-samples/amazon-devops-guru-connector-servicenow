@@ -160,7 +160,7 @@ public class ServiceNowConnector {
     }
 
     // To update incident record using a PUT request
-    private Incident updateIncident(Context context, Incident incident) {
+    private void updateIncident(Context context, Incident incident) {
         LambdaLogger logger = context.getLogger();
         logger.log("Updating incident. " + incident.getId());
 
@@ -188,7 +188,6 @@ public class ServiceNowConnector {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return responseIncident;
     }
 
     // An HttpRequest instance is built through an HttpRequest builder
@@ -365,8 +364,7 @@ public class ServiceNowConnector {
         if (getSecretValueResult.getSecretString() != null) {
             secret = getSecretValueResult.getSecretString();
             try {
-                JSONObject jsonObject = new JSONObject(secret);
-                return jsonObject;
+                return new JSONObject(secret);
             } catch (JSONException e) {
                 context.getLogger().log("ERROR JSONException : " + e.getMessage());
                 throw new RuntimeException(e);

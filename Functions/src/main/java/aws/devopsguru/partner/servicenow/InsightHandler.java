@@ -69,7 +69,6 @@ public class InsightHandler implements RequestHandler<Map<String, Object>, Strin
 
     public String handleRequest(Map<String, Object> input, final Context context) {
 
-        Incident incident;
         LambdaLogger logger = context.getLogger();
         JsonNode jsonNode = ServiceNowConnector.getJsonNodeFromInput(input, context);
 

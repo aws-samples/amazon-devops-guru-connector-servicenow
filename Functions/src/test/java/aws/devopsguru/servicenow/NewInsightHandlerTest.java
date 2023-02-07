@@ -8,8 +8,6 @@ public class NewInsightHandlerTest {
     @Test
     public void successfulResponse() {
         InsightHandler app = new InsightHandler();
-        ServiceNowConnector.username = "username";
-        ServiceNowConnector.password = "password";
         ServiceNowConnector.serviceNowHost = "www.servicenow.com";
     }
 
