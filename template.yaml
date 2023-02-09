@@ -11,11 +11,9 @@ Globals:
     Timeout: 20
 
 Parameters:
-  UserName:
-    Type: String
-  Password:
-    Type: String
   ServiceNowHost:
+    Type: String
+  SecretName:
     Type: String
 Metadata:
   AWS::ServerlessRepo::Application:
@@ -42,15 +40,16 @@ Resources:
       MemorySize: 512
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          USER_NAME: !Ref UserName
-          PASSWORD: !Ref Password
           SERVICE_NOW_HOST: !Ref ServiceNowHost
-      Policies: 
-        - AmazonDevOpsGuruReadOnlyAccess
+          SECRET_NAME: !Ref SecretName
+      Policies:
+          - AmazonDevOpsGuruReadOnlyAccess
+          - AWSSecretsManagerGetSecretValuePolicy:
+              SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${SecretName}-??????"
       Events:
         DevOpsGuru:
           Type: EventBridgeRule
           Properties:
             Pattern:
-              source: 
+              source:
                 - "aws.devops-guru"

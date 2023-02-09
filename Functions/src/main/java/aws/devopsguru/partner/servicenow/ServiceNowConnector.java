@@ -6,10 +6,17 @@ import aws.devopsguru.partner.servicenow.model.ServiceNowResults;
 import com.amazonaws.services.devopsguru.model.InsightSeverity;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.secretsmanager.AWSSecretsManager;
+import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
+import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
+import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
 import com.amazonaws.util.StringUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -25,8 +32,7 @@ public class ServiceNowConnector {
     public static final String NEW_LINE = System.lineSeparator();
 
     // Configure your Environment variables in AWS Lambda.
-    public static String username = System.getenv("USER_NAME");
-    public static String password = System.getenv("PASSWORD");
+    public static String secretName = System.getenv("SECRET_NAME");
     public static String serviceNowHost = System.getenv("SERVICE_NOW_HOST");
 
     // The Table API provides endpoints that allow you to perform create, read, update, and delete (CRUD) operations on existing tables.
@@ -48,7 +54,7 @@ public class ServiceNowConnector {
         try {
             requestBody = incidentToJson(incident);
             HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = getBuilderWithBasicValues(baseUriPath).POST(HttpRequest.BodyPublishers.ofString(requestBody)).build();
+            HttpRequest request = getBuilderWithBasicValues(baseUriPath,context).POST(HttpRequest.BodyPublishers.ofString(requestBody)).build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() >= 200 && response.statusCode() < 299) {
@@ -128,7 +134,7 @@ public class ServiceNowConnector {
         Incident result;
         try {
             HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = getBuilderWithBasicValues(baseUriPath + "?sysparm_query=descriptionLIKE" + insightId + "&sysparm_limit=1").GET().build();
+            HttpRequest request = getBuilderWithBasicValues(baseUriPath + "?sysparm_query=descriptionLIKE" + insightId + "&sysparm_limit=1",context).GET().build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() >= 200 && response.statusCode() < 299) {
@@ -154,7 +160,7 @@ public class ServiceNowConnector {
     }
 
     // To update incident record using a PUT request
-    private Incident updateIncident(Context context, Incident incident) {
+    private void updateIncident(Context context, Incident incident) {
         LambdaLogger logger = context.getLogger();
         logger.log("Updating incident. " + incident.getId());
 
@@ -164,7 +170,7 @@ public class ServiceNowConnector {
             requestBody = incidentToJson(incident);
             //An HttpClient can be used to send requests and retrieve their responses
             HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = getBuilderWithBasicValues(baseUriPath + "/" + incident.getId()).PUT(HttpRequest.BodyPublishers.ofString(requestBody)).build();
+            HttpRequest request = getBuilderWithBasicValues(baseUriPath + "/" + incident.getId(),context).PUT(HttpRequest.BodyPublishers.ofString(requestBody)).build();
 
             // This class provides methods for accessing the response status code, headers, the response body,
             // and the HttpRequest corresponding to this response.
@@ -182,11 +188,22 @@ public class ServiceNowConnector {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return responseIncident;
     }
 
     // An HttpRequest instance is built through an HttpRequest builder
-    private HttpRequest.Builder getBuilderWithBasicValues(String uriPath) {
+    private HttpRequest.Builder getBuilderWithBasicValues(String uriPath,Context context) {
+
+        JSONObject serviceNowCredentials = getSecret(secretName,context);
+
+        String username;
+        String password;
+        try {
+            username = serviceNowCredentials.getString("username");
+            password = serviceNowCredentials.getString("password");
+        } catch (JSONException e) {
+            context.getLogger().log("ERROR JsonProcessingException : " + e.getMessage());
+            throw new RuntimeException(e);}
+
         if (serviceNowHost == null || username == null || password == null) {
             throw new RuntimeException("ERROR! Could not find environment variables for ServiceNow!");
         }
@@ -196,6 +213,7 @@ public class ServiceNowConnector {
 
         return HttpRequest.newBuilder().uri(URI.create(urlForCreateIncident)).header("Accept", "application/json").header("Authorization", headerAuth);
     }
+
 
     // JSON object format
     private String incidentToJson(Incident incident) throws JsonProcessingException {
@@ -325,5 +343,34 @@ public class ServiceNowConnector {
             throw new RuntimeException(e);
         }
         return jsonNode;
+    }
+
+    public JSONObject getSecret(String secretName,Context context) {
+
+        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
+                .build();
+
+        String secret;
+        GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
+                .withSecretId(secretName);
+        GetSecretValueResult getSecretValueResult = null;
+
+        try {
+            getSecretValueResult = client.getSecretValue(getSecretValueRequest);
+        } catch (Exception e) {
+            context.getLogger().log("ERROR Exception : " + e.getMessage());
+            throw e;
+        }
+        if (getSecretValueResult.getSecretString() != null) {
+            secret = getSecretValueResult.getSecretString();
+            try {
+                return new JSONObject(secret);
+            } catch (JSONException e) {
+                context.getLogger().log("ERROR JSONException : " + e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
+        context.getLogger().log("Error while fetching secret values, refer to above logs");
+        throw new RuntimeException("Error while fetching secret values, refer to above logs");
     }
 }

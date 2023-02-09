@@ -2,10 +2,12 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "ServiceNow"
-s3_bucket = "servicenowserverless"
-s3_prefix = "ServiceNow"
-region = "us-east-1"
+stack_name = "serverlessrepo-DevOps-Guru-ServiceNow-Connector"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-96y429pwgq4l"
+s3_prefix = "serverlessrepo-DevOps-Guru-ServiceNow-Connector"
+region = "us-east-2"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
+disable_rollback = true
+parameter_overrides = "ServiceNowHost=\"dev98071.service-now.com\" SecretName=\"servicenow_creds\""
