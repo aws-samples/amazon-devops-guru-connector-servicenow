@@ -43,7 +43,9 @@ Resources:
           SERVICE_NOW_HOST: !Ref ServiceNowHost
           SECRET_NAME: !Ref SecretName
       Policies:
-        - AmazonDevOpsGuruReadOnlyAccess
+          - AmazonDevOpsGuruReadOnlyAccess
+          - AWSSecretsManagerGetSecretValuePolicy:
+              SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${SecretName}-??????"
       Events:
         DevOpsGuru:
           Type: EventBridgeRule
