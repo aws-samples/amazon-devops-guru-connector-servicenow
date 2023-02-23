@@ -4,7 +4,7 @@ This project contains source code and supporting files for a serverless applicat
 
 - Functions/src/main - Code for the application's Lambda function.
 - Events - Invocation events that you can use to invoke the function.
-- Functions/src/test - Unit tests for the application code. 
+- Functions/src/test - Unit tests for the application code.
 - template.yaml - A template that defines the application's AWS resources.
 
 The application uses several AWS resources, including Lambda functions. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
@@ -65,7 +65,7 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-sam local invoke ServiceNowFunctions --event Functions/src/test/Events/CreateIncident.json
+sam local invoke Functions --event Functions/src/test/Events/CreateIncident.json --env-vars Functions/src/test/Events/env.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
@@ -97,7 +97,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-sam logs -n ServiceNowFunctions --stack-name ServiceNowFunctions --tail
+sam logs -n Functions --stack-name Functions --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -107,7 +107,7 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `ServiceNowFunction/src/test` folder in this project.
 
 ```bash
-cd ServiceNowFunctions
+cd Functions
 mvn test
 ```
 
@@ -116,7 +116,7 @@ mvn test
 To delete the sample application that you created, use the AWS CLI. Assuming you used your project name for the stack name, you can run the following:
 
 ```bash
-aws cloudformation delete-stack --stack-name ServiceNowFunctions
+aws cloudformation delete-stack --stack-name Functions
 ```
 
 ## Resources
@@ -129,37 +129,37 @@ Next, you can use AWS Serverless Application Repository to deploy ready to use A
 ## ServiceNow
 
 1. The registration process for the ServiceNow developer portal is fairly simple. You can click on the REGISTER link in the upper-right, if you are not already registered, and fill in your name, e-mail, and choose a password to complete your registration.
-[Create your account in ServiceNow](https://developer.servicenow.com/)
+   [Create your account in ServiceNow](https://developer.servicenow.com/)
 
 2. Getting started with credentials
-Go to (https://developer.servicenow.com/) and click on your profile. After activating your instance you can see instance actions on your profile page, click "Manage instance password". There are the instance name, instance URL, username, and password. You need only intstance URL, username, and password. 
+   Go to (https://developer.servicenow.com/) and click on your profile. After activating your instance you can see instance actions on your profile page, click "Manage instance password". There are the instance name, instance URL, username, and password. You need only intstance URL, username, and password.
 
-* Basic Authentication (recommended): A user name and password combination used to authenticate to the REST API. 
+* Basic Authentication (recommended): A user name and password combination used to authenticate to the REST API.
 * API Key: A unique code provided by the REST API to identify the calling application or user.
 * OAuth 2.0: An authentication provider provides a secret and uses that information to grant access to a resource. OAuth is beyond the scope of this training module.
 
 Basic Authentication Credentials
 In the list of credential types, click the Basic Auth Credentials link. Configure the User name, and Password for the Credential.
- 
+
 * [SERVICE_NOW_HOST]: Your ServiceNow host name/instance URL. Example: dev92031.service-now.com
 * [USER_NAME]: The user name for the account to access the REST API.
 * [PASSWORD]: The password for the account to access the REST API.
 
 When the Basic Authentication credential is used, ServiceNow generates an encoded string from the user name and password, which is passed to the Authorization header as a Basic encoded-string.
 
-* Configuring environment variables 
+* Configuring environment variables
   - Open the Functions page of the Lambda console
-  - Choose a function. 
+  - Choose a function.
   - Choose Configuration, then choose Environment variables.
   - Enter a key and value.
-Requirements
+    Requirements
   - Keys start with a letter and are at least two characters.
   - Keys only contain letters, numbers, and the underscore character (_).
   - Keys aren't reserved by Lambda.
   - The total size of all environment variables doesn't exceed 4 KB.
 
 3. There is no SDK provided by ServiceNow. So, we are using Rest APIs.
-ServiceNow REST APIs support Basic Authentication.
+   ServiceNow REST APIs support Basic Authentication.
 
 We use java HttpClient to send requests and retrieve their responses.
 
